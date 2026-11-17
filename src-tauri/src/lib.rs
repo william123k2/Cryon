@@ -61,6 +61,7 @@ fn stop_game(engine: tauri::State<'_, Engine>) {
 #[tauri::command]
 fn start_operation(
     engine: tauri::State<'_, Engine>,
+    window: tauri::WebviewWindow,
     instance_id: String,
     launch: bool,
 ) -> Result<()> {
@@ -71,7 +72,7 @@ fn start_operation(
         let result = async {
             let installed = minecraft::install(&engine, &instance).await?;
             if launch {
-                process::launch(&engine, instance, installed).await?;
+                process::launch(&engine, instance, installed, Some(window)).await?;
             }
             Ok(())
         }

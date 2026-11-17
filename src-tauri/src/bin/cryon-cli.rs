@@ -75,7 +75,7 @@ async fn run() -> Result<()> {
     let result = async {
         let installed = minecraft::install(&engine, &instance).await?;
         if action == "launch" {
-            process::launch(&engine, instance, installed).await?;
+            process::launch(&engine, instance, installed, None).await?;
             let mut seconds = 0;
             while engine.snapshot()?.game.running {
                 tokio::time::sleep(std::time::Duration::from_secs(1)).await;

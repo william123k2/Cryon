@@ -792,6 +792,24 @@ dd {
   background: none;
   margin-left: auto;
 }
+.toast-error {
+  color: #ffe8ed;
+  background: #351722f5;
+  border-color: #d66a83;
+}
+.toast-error > svg {
+  color: #ff8199;
+}
+.launch-error {
+  border-color: #d66a8377;
+  color: #ffe8ed;
+}
+.launch-error p {
+  overflow-wrap: anywhere;
+}
+.launch-error p:last-child {
+  margin-bottom: 0;
+}
 .modal-backdrop {
   position: fixed;
   inset: 0;

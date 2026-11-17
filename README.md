@@ -1,10 +1,10 @@
-# Cryon 0.2.0
+# Cryon 0.2.1
 
 Launcher Vanilla independente para Minecraft Java Edition, com Rust, Tauri 2, React, TypeScript e Vite. Plataforma desta edição: Windows 10/11 x64.
 
 ## Instalador Windows x64
 
-Baixe e execute o [instalador Cryon 0.2.0](downloads/Cryon_0.2.0_x64-setup.exe) (3,9 MB). O pacote foi compilado para Windows x64 e a validação registrada está em [VALIDACAO.md](VALIDACAO.md).
+Baixe e execute o [instalador Cryon 0.2.1](downloads/Cryon_0.2.1_x64-setup.exe). O pacote foi compilado para Windows x64 e a validação registrada está em [VALIDACAO.md](VALIDACAO.md).
 
 O Windows pode avisar que o editor não foi verificado porque o instalador não tem assinatura digital. O Cryon precisa do Microsoft Edge WebView2. Na primeira instalação de uma versão do jogo, precisa de internet para obter os arquivos oficiais e o runtime Java Temurin; não é necessário instalar Java manualmente.
 
@@ -35,6 +35,7 @@ O perfil é **local/offline**. Não há OAuth Microsoft, autenticação de servi
 - Cliente JAR, bibliotecas, assets, logging oficial, extração de nativas e assets legados quando declarados.
 - Regras de SO/arquitetura e recursos, argumentos modernos condicionais e argumentos legados, classpath sem shell e suporte a caminhos com espaços.
 - Processo Java real, captura de stdout/stderr, código de saída, logs em disco e exportação de diagnóstico.
+- Ao abrir o jogo, minimiza o launcher; ao fechar, restaura o estado original da janela. Encerramentos inesperados exibem um aviso com o código e as mensagens de erro mais recentes.
 - Trava exclusiva da pasta de dados para evitar dois launchers gravando a mesma configuração ao mesmo tempo.
 - Interface própria azul, cristal original, layout responsivo e estados baseados no backend.
 

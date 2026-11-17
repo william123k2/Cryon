@@ -33,6 +33,7 @@ pub struct GameStatus {
     pub pid: Option<u32>,
     pub version: String,
     pub exit_code: Option<i32>,
+    pub error: Option<String>,
 }
 #[derive(Clone, serde::Serialize)]
 pub struct Snapshot {
@@ -89,7 +90,11 @@ impl Engine {
         let saved = settings::load(&root)?;
         settings::save(&root, &saved)?;
         let http = reqwest::Client::builder()
-            .user_agent("Cryon/0.2.0 (Windows Vanilla Launcher)")
+            .user_agent(concat!(
+                "Cryon/",
+                env!("CARGO_PKG_VERSION"),
+                " (Windows Vanilla Launcher)"
+            ))
             .connect_timeout(std::time::Duration::from_secs(20))
             .timeout(std::time::Duration::from_secs(180))
             .redirect(reqwest::redirect::Policy::custom(|a| {

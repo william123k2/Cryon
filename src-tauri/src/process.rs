@@ -140,11 +140,17 @@ pub fn arguments(
     }
     Ok(args)
 }
-pub async fn launch(engine: &Engine, instance: Instance, installed: Installation) -> Result<()> {
+pub async fn launch(
+    engine: &Engine,
+    instance: Instance,
+    installed: Installation,
+    window: Option<tauri::WebviewWindow>,
+) -> Result<()> {
     engine.check_cancel()?;
     let major = crate::java::required(&installed.metadata)?;
     let java = crate::java::ensure(engine, major).await?;
     let args = arguments(engine, &instance, &installed)?;
+    let original_window = window.as_ref().map(WindowState::capture);
     let log_dir = engine.0.root.join("logs");
     std::fs::create_dir_all(&log_dir).ctx("Criar logs")?;
     let path = log_dir.join(format!("minecraft-{}.log", uuid::Uuid::new_v4()));
@@ -172,6 +178,7 @@ pub async fn launch(engine: &Engine, instance: Instance, installed: Installation
         status.pid = pid;
         status.version = installed.version.clone();
         status.exit_code = None;
+        status.error = None;
     }
     engine.log(format!(
         "Minecraft {} iniciado; PID {:?}; Java {major}; RAM {}–{} MB; perfil offline.",
@@ -203,13 +210,29 @@ pub async fn launch(engine: &Engine, instance: Instance, installed: Installation
     let err = tokio::spawn(lines(e, stderr, log));
     let e = engine.clone();
     tokio::spawn(async move {
+        let started = std::time::Instant::now();
+        let mut minimized_by_launcher = false;
         let code = loop {
             if e.0.stop_game.load(Ordering::SeqCst) {
                 let _ = child.start_kill();
             }
             match child.try_wait() {
                 Ok(Some(status)) => break status.code(),
-                Ok(None) => tokio::time::sleep(std::time::Duration::from_millis(400)).await,
+                Ok(None) => {
+                    if !minimized_by_launcher
+                        && started.elapsed() >= std::time::Duration::from_secs(3)
+                    {
+                        if let Some(window) = &window {
+                            match window.minimize() {
+                                Ok(()) => minimized_by_launcher = true,
+                                Err(error) => {
+                                    e.log(format!("Não foi possível minimizar o launcher: {error}"))
+                                }
+                            }
+                        }
+                    }
+                    tokio::time::sleep(std::time::Duration::from_millis(400)).await
+                }
                 Err(error) => {
                     e.log(format!("Falha ao acompanhar Java: {error}"));
                     break None;
@@ -218,14 +241,117 @@ pub async fn launch(engine: &Engine, instance: Instance, installed: Installation
         };
         let _ = out.await;
         let _ = err.await;
+        let stopped_by_user = e.0.stop_game.load(Ordering::SeqCst);
+        let error = if stopped_by_user {
+            None
+        } else {
+            match code {
+                Some(0) => None,
+                Some(code) => {
+                    let mut message = format!(
+                        "O jogo encerrou com código {code}. Consulte os logs da sessão para ver a causa."
+                    );
+                    let mut hints = e
+                        .0
+                        .logs
+                        .lock()
+                        .ok()
+                        .map(|logs| {
+                            logs.iter()
+                                .rev()
+                                .filter(|line| {
+                                    let line = line.to_ascii_lowercase();
+                                    [
+                                        "exception",
+                                        "error",
+                                        "failed",
+                                        "could not",
+                                        "unsupported",
+                                        "fatal",
+                                        "unable to",
+                                        "opengl",
+                                    ]
+                                    .iter()
+                                    .any(|word| line.contains(word))
+                                })
+                                .take(4)
+                                .cloned()
+                                .collect::<Vec<_>>()
+                        })
+                        .unwrap_or_default();
+                    hints.reverse();
+                    if !hints.is_empty() {
+                        message.push_str(" Mensagens recentes: ");
+                        message.push_str(&hints.join(" | "));
+                    }
+                    Some(message)
+                }
+                None => Some(
+                    "O processo do jogo encerrou sem retornar um código. Consulte os logs da sessão para ver a causa."
+                        .into(),
+                ),
+            }
+        };
         if let Ok(mut status) = e.0.game.lock() {
             status.running = false;
             status.pid = None;
             status.exit_code = code;
+            status.error = error.clone();
+        }
+        if let Some(error) = error {
+            e.log(format!("ERRO: {error}"));
+        } else if stopped_by_user {
+            e.log("Jogo encerrado pelo usuário.");
+        }
+        if minimized_by_launcher {
+            if let (Some(window), Some(state)) = (&window, original_window) {
+                restore_window(window, state);
+            }
         }
         e.log(format!("Minecraft encerrado. Código de saída: {code:?}"));
     });
     Ok(())
+}
+
+#[derive(Clone, Copy)]
+struct WindowState {
+    visible: bool,
+    minimized: bool,
+    maximized: bool,
+    fullscreen: bool,
+}
+
+impl WindowState {
+    fn capture(window: &tauri::WebviewWindow) -> Self {
+        Self {
+            visible: window.is_visible().unwrap_or(true),
+            minimized: window.is_minimized().unwrap_or(false),
+            maximized: window.is_maximized().unwrap_or(false),
+            fullscreen: window.is_fullscreen().unwrap_or(false),
+        }
+    }
+}
+
+fn restore_window(window: &tauri::WebviewWindow, state: WindowState) {
+    let _ = window.set_fullscreen(state.fullscreen);
+    if !state.fullscreen {
+        if state.maximized {
+            let _ = window.maximize();
+        } else {
+            let _ = window.unmaximize();
+        }
+    }
+    if state.visible {
+        let _ = window.show();
+        if state.minimized {
+            let _ = window.minimize();
+        } else {
+            let _ = window.unminimize();
+            let _ = window.set_focus();
+        }
+    } else {
+        let _ = window.hide();
+    }
 }
 #[cfg(test)]
 mod tests {

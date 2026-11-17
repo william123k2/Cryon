@@ -54,6 +54,7 @@ export default function App() {
     [loadError, setLoadError] = useState("");
   const configJson = useRef("");
   const mounted = useRef(true);
+  const reportedError = useRef("");
   async function refresh() {
     try {
       const s = await command<Snapshot>("snapshot");
@@ -91,6 +92,17 @@ export default function App() {
   useEffect(() => {
     if (saved && !catalog.length && !catalogBusy) void loadVersions();
   }, [!!saved]);
+  useEffect(() => {
+    const error =
+      snapshot?.game.error ||
+      (snapshot?.progress.status === "error" ? snapshot.progress.error : null);
+    if (error && error !== reportedError.current) {
+      reportedError.current = error;
+      setNotice(`Erro ao abrir o jogo: ${error}`);
+    } else if (!error) {
+      reportedError.current = "";
+    }
+  }, [snapshot?.game.error, snapshot?.progress.status, snapshot?.progress.error]);
   async function save(next: Saved) {
     const result = await command<Saved>("save_state", { saved: next });
     configJson.current = JSON.stringify(result);
@@ -112,11 +124,12 @@ export default function App() {
           ),
         });
       }
+      if (launch) setPage("Downloads");
       await command("start_operation", { instanceId: current.id, launch });
       await refresh();
       if (!launch) setPage("Downloads");
     } catch (e) {
-      setNotice(String(e));
+      setNotice(`Erro ao iniciar: ${String(e)}`);
     }
   }
   async function chooseVersion(version: string) {
@@ -207,7 +220,7 @@ export default function App() {
         </nav>
         <div className="sidebar-bottom">
           <div className="build-label">
-            <span className="dot" /> VANILLA · OFFLINE <span>0.2.0</span>
+            <span className="dot" /> VANILLA · OFFLINE <span>{snapshot?.app_version ?? ""}</span>
           </div>
           <div className="profile">
             <div className="avatar">{name.slice(0, 2).toUpperCase()}</div>
@@ -604,6 +617,13 @@ export default function App() {
                 {page === "Downloads" && (
                   <>
                     <Transfer progress={snapshot.progress} notify={setNotice} />
+                    {!snapshot.game.running && snapshot.game.error && (
+                      <section className="panel launch-error" role="alert">
+                        <strong>O jogo fechou antes de abrir</strong>
+                        <p>{snapshot.game.error}</p>
+                        <p>As linhas de diagnóstico aparecem logo abaixo. Copie-as ao pedir ajuda.</p>
+                      </section>
+                    )}
                     {snapshot.progress.status === "error" && current && (
                       <button
                         className="primary"
@@ -663,7 +683,10 @@ export default function App() {
         </footer>
       </main>
       {notice && (
-        <div role="status" className="toast">
+        <div
+          role={notice.startsWith("Erro") ? "alert" : "status"}
+          className={`toast ${notice.startsWith("Erro") ? "toast-error" : ""}`}
+        >
           <Info size={20} />
           <span>{notice}</span>
           <button aria-label="Fechar aviso" onClick={() => setNotice("")}>

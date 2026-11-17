@@ -48,6 +48,7 @@ export type Snapshot = {
     pid: number | null;
     version: string;
     exit_code: number | null;
+    error?: string | null;
   };
   logs: string[];
   installed: string[];

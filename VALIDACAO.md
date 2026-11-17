@@ -1,4 +1,4 @@
-# Validação do Cryon 0.2.0
+# Validação do Cryon 0.2.1
 
 **Resultado final: etapas 1–5 concluídas para o escopo Vanilla/offline no Windows x64.** Executável de produção compilado, instalador NSIS instalado com sucesso, perfil/instâncias persistentes e inicialização real confirmada em duas versões do Minecraft.
 
@@ -9,6 +9,12 @@
 | 3 — catálogo, downloads e Java | Manifesto oficial, Java 8/21 privados, integridade, recuperação e cancelamento aprovados |
 | 4 — instalação e jogo | Minecraft 1.16.5 e 1.21.4 alcançaram o menu principal e saíram com código 0 |
 | 5 — distribuição Windows | Build release otimizado, instalador NSIS x64 e cópia instalada testados |
+
+## Atualização 0.2.1
+
+- Exibe um alerta persistente se o jogo encerrar inesperadamente, com o código de saída e as mensagens mais recentes do Java. A tentativa de abertura leva à tela de logs.
+- Minimiza o launcher três segundos depois do processo do jogo continuar ativo; ao sair, restaura a janela ao estado anterior (normal, maximizada, tela cheia ou minimizada).
+- Validação nesta atualização: TypeScript/Vite, nove testes Rust e build NSIS x64 passaram. O instalador 0.2.1 abriu a versão 1.16.5 até o menu principal; o launcher minimizou durante a execução e restaurou após a saída normal (código 0).
 
 ## Verificações já concluídas
 

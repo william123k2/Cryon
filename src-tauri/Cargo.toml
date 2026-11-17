@@ -1,6 +1,6 @@
 [package]
 name = "cryon"
-version = "0.2.0"
+version = "0.2.1"
 description = "Cryon Minecraft Launcher"
 authors = ["Cryon"]
 edition = "2021"
