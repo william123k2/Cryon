@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#080d19" />
+    <meta name="description" content="Baixe o Cryon para Windows e consulte as instruções de instalação." />
+    <title>Cryon — Aplicativo para Windows</title>
+    <style>
+      :root { color-scheme: dark; font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; background: #080d19; color: #eef3ff; }
+      * { box-sizing: border-box; }
+      body { margin: 0; min-height: 100vh; background: radial-gradient(ellipse at 50% 0%, #172747 0, #0b1324 42%, #080d19 78%); }
+      main { width: min(100% - 32px, 880px); margin: auto; padding: 72px 0 48px; }
+      .brand { display: flex; align-items: center; gap: 12px; color: #cfe0ff; font-weight: 700; letter-spacing: .08em; }
+      .mark { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid #78aaff80; border-radius: 13px; color: #9ec3ff; background: #162844; font-size: 23px; }
+      .hero { padding: 80px 0 54px; max-width: 690px; }
+      .eyebrow { color: #8eb8ff; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+      h1 { margin: 16px 0; font-size: clamp(42px, 8vw, 72px); line-height: 1.03; letter-spacing: -.055em; }
+      .lead { max-width: 570px; color: #aab8d0; font-size: 18px; line-height: 1.7; }
+      .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+      a.button { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; padding: 0 20px; border: 1px solid #6f9ef4; border-radius: 10px; background: #3674e8; color: white; font-weight: 700; text-decoration: none; transition: .15s ease; }
+      a.button:hover { background: #4b85f2; transform: translateY(-1px); }
+      a.button.secondary { border-color: #34445f; background: #111c2e; color: #d6e2f5; }
+      section { margin-top: 22px; padding: 24px; border: 1px solid #27364e; border-radius: 16px; background: #0d1626cc; }
+      h2 { margin: 0 0 12px; font-size: 19px; }
+      p, li { color: #aab8d0; line-height: 1.65; }
+      p:last-child { margin-bottom: 0; }
+      ol { margin: 12px 0 0; padding-left: 22px; }
+      li + li { margin-top: 7px; }
+      .small { font-size: 13px; overflow-wrap: anywhere; }
+      footer { margin-top: 34px; color: #71809a; font-size: 13px; }
+      footer a { color: #9dbfff; }
+      @media (max-width: 560px) { main { padding-top: 36px; } .hero { padding: 58px 0 34px; } section { padding: 20px; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="brand"><span class="mark" aria-hidden="true">◇</span><span>CRYON</span></div>
+      <header class="hero">
+        <div class="eyebrow">Aplicativo para Windows</div>
+        <h1>Seu próximo mundo começa aqui.</h1>
+        <p class="lead">Instale o Cryon no Windows 10 ou 11 (64 bits). Esta página oferece o instalador e as instruções; o Cryon é um aplicativo desktop.</p>
+        <div class="actions">
+          <a class="button" href="/Cryon/downloads/Cryon_0.2.0_x64-setup.exe">Baixar Cryon para Windows</a>
+          <a class="button secondary" href="https://github.com/william123k2/Cryon">Ver código-fonte</a>
+        </div>
+      </header>
+      <section>
+        <h2>Instalação</h2>
+        <ol>
+          <li>Baixe e abra o instalador.</li>
+          <li>Se o Windows mostrar um aviso de editor não verificado, confirme que o arquivo veio deste repositório público e confira o hash abaixo.</li>
+          <li>Abra o Cryon pelo menu Iniciar. O Microsoft Edge WebView2 é necessário; Java não precisa ser instalado manualmente.</li>
+        </ol>
+        <p class="small">SHA-256: <code>A14BB5523CB939EA5C4606B2D7484A76F55D368B7F0007A2B8918822C07847F9</code></p>
+      </section>
+      <section>
+        <h2>Requisitos e ajuda</h2>
+        <p>Compatível com Windows 10/11 x64. Na primeira instalação de uma versão, é necessária conexão à internet. Consulte o <a href="https://github.com/william123k2/Cryon#readme">guia completo</a> e a <a href="https://github.com/william123k2/Cryon/blob/main/VALIDACAO.md">validação da versão</a>.</p>
+      </section>
+      <footer>Projeto aberto no <a href="https://github.com/william123k2/Cryon">GitHub</a>.</footer>
+    </main>
+  </body>
+</html>
