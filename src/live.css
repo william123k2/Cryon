@@ -1,0 +1,211 @@
+.input-row {
+  display: flex;
+  gap: 9px;
+}
+.input-row > input {
+  flex: 1;
+  min-width: 0;
+}
+.input-row > button {
+  padding: 10px;
+}
+.transfer {
+  padding: 20px 24px;
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.transfer-title {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+.transfer-title > svg {
+  color: #38dfff;
+  flex-shrink: 0;
+}
+.transfer-title > div {
+  min-width: 0;
+  flex: 1;
+}
+.transfer-title strong {
+  font-size: 13px;
+}
+.transfer-title small {
+  display: block;
+  font-size: 10px;
+  overflow-wrap: anywhere;
+  margin-top: 6px;
+}
+.transfer-title button {
+  font-size: 11px;
+}
+.transfer progress {
+  width: 100%;
+  height: 9px;
+  appearance: none;
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #162d47;
+}
+.transfer progress::-webkit-progress-bar {
+  background: #162d47;
+}
+.transfer progress::-webkit-progress-value {
+  background: linear-gradient(90deg, #168bff, #38dfff);
+  border-radius: 8px;
+}
+.transfer-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  color: #96bad6;
+  font-size: 10px;
+}
+.transfer > small {
+  font-size: 9px;
+}
+.catalog-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.catalog-toolbar > input {
+  flex: 1;
+  min-width: 210px;
+}
+.catalog-toolbar > button {
+  font-size: 11px;
+}
+.version-list {
+  margin-top: 20px;
+  max-height: 650px;
+  overflow: auto;
+}
+.version-row {
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border-bottom: 1px solid #243c5677;
+}
+.version-row > svg {
+  color: #63ccff;
+}
+.version-row strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+.version-row small {
+  display: block;
+  font-size: 10px;
+  margin-top: 5px;
+}
+.version-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+.version-actions button {
+  font-size: 11px;
+  padding: 9px 12px;
+}
+.log-panel {
+  margin-top: 25px;
+  padding: 20px;
+}
+.log-panel .section-heading {
+  margin: 0 0 15px;
+}
+.log-panel h2 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.log-panel button {
+  font-size: 11px;
+}
+.log-panel pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+  line-height: 1.6;
+  color: #a9c3dc;
+  max-height: 450px;
+  overflow: auto;
+  background: #060e1b;
+  padding: 15px;
+  border-radius: 7px;
+}
+.callout.error {
+  margin-bottom: 20px;
+  border-color: #c15d7966;
+  color: #ffbbce;
+}
+.callout.error span {
+  flex: 1;
+}
+.callout.error button {
+  font-size: 11px;
+}
+code {
+  font-size: 10px;
+  overflow-wrap: anywhere;
+}
+.instance > div:nth-child(2) {
+  min-width: 0;
+}
+.instance small {
+  overflow-wrap: anywhere;
+}
+dl dd {
+  word-break: break-word;
+}
+.play {
+  min-height: 65px;
+}
+.play:disabled {
+  font-size: 15px;
+}
+@media (max-width: 720px) {
+  .version-row {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .version-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .transfer {
+    padding: 17px;
+  }
+  .transfer-meta {
+    flex-direction: column;
+    gap: 5px;
+  }
+  .transfer-title button {
+    font-size: 0;
+  }
+  .transfer-title button svg {
+    width: 18px;
+  }
+  .catalog-toolbar {
+    gap: 12px;
+  }
+  .catalog-toolbar > input {
+    min-width: 100%;
+  }
+  .field input {
+    font-size: 13px;
+  }
+  .callout {
+    flex-wrap: wrap;
+  }
+  .modal {
+    padding: 25px;
+  }
+}
